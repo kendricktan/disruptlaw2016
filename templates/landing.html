@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 {% load staticfiles %} {% include "head.html" %}
+{% csrf_token %}
 
 <body>
     <div class="container">
@@ -83,38 +84,18 @@
         </div>
     </div>
 
-    <script>
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        $('#signup_button').click(function signup_email() {
-            var csrftoken = getCookie('csrftoken');
-            console.log(csrftoken);
+    <script>        
+        $('#signup_button').click(function signup_email() {            
             $.ajax({
                 type: "POST",
                 url: "/landing",
                 data: {
-                    email: $("#email_txtbox").val(),
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                    'email': $("#email_txtbox").val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },                
                 success: function() {
                     console.log('submitted!');
-                    var div_str = "Thank you for signing up!";
+                    var div_str = "<p class='text-center'>Thank you for signing up!</a>";
                     $("#reply_div").html(div_str);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
